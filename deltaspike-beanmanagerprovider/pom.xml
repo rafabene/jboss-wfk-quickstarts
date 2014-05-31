@@ -132,19 +132,20 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Deltaspike API. we use compile scope as we need its API -->
+        <!-- Deltaspike API, we use provided scope because Delstaspike is included 
+			as a JBoss Module -->
         <dependency>
             <groupId>org.apache.deltaspike.core</groupId>
             <artifactId>deltaspike-core-api</artifactId>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
-        <!-- Deltaspike Impl. we use runtime scope as we its implementation 
-            dependencies only on runtime -->
+        <!-- Deltaspike Impl, we use provided scope because Delstaspike is included 
+			as a JBoss Module -->
         <dependency>
             <groupId>org.apache.deltaspike.core</groupId>
             <artifactId>deltaspike-core-impl</artifactId>
-            <scope>runtime</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

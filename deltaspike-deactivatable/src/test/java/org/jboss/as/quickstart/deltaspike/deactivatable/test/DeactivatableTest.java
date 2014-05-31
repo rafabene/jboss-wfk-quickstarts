@@ -16,7 +16,6 @@
  */
 package org.jboss.as.quickstart.deltaspike.deactivatable.test;
 
-import java.io.File;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -24,13 +23,12 @@ import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.as.quickstart.deltaspike.deactivatable.MyBean;
 import org.jboss.as.quickstart.deltaspike.deactivatable.ExcludeExtensionDeactivator;
+import org.jboss.as.quickstart.deltaspike.deactivatable.MyBean;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -43,15 +41,11 @@ public class DeactivatableTest {
     @Deployment
     public static Archive<?> getDeployment() {
 
-        File[] libs = Maven.resolver().loadPomFromFile("pom.xml").resolve(
-                "org.apache.deltaspike.core:deltaspike-core-api", 
-                "org.apache.deltaspike.core:deltaspike-core-impl").withTransitivity().asFile();
-
         Archive<?> archive = ShrinkWrap
                 .create(WebArchive.class, "deactivator.war")
                 .addPackages(true, ExcludeExtensionDeactivator.class.getPackage())
-                .addAsLibraries(libs)
-                .addAsResource("META-INF/apache-deltaspike.properties")          
+                .addAsResource("META-INF/apache-deltaspike.properties")
+                .addAsWebInfResource("jboss-deployment-structure.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
         return archive;
     }

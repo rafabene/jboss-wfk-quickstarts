@@ -42,16 +42,16 @@ import org.junit.runner.RunWith;
  * Verification test.
  */
 @RunWith(Arquillian.class)
-public class QueryServiceTest {
+public class QueryServiceTest
+{
 
     @Deployment
-    public static Archive<?> getDeployment() {
+    public static Archive<?> getDeployment()
+    {
 
         File[] libs = Maven.resolver().loadPomFromFile("pom.xml").resolve(
-                "org.apache.deltaspike.core:deltaspike-core-api", 
-                "org.apache.deltaspike.core:deltaspike-core-impl",
                 "org.apache.deltaspike.modules:deltaspike-partial-bean-module-impl"
-        ).withTransitivity().asFile();
+                ).withTransitivity().asFile();
 
         Archive<?> archive = ShrinkWrap
                 .create(WebArchive.class, "test.war")
@@ -60,6 +60,7 @@ public class QueryServiceTest {
                 .addPackages(true, Resources.class.getPackage())
                 .addAsLibraries(libs)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml").addAsResource("import.sql")
+                .addAsWebInfResource("jboss-deployment-structure.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 // Deploy our test datasource
                 .addAsWebInfResource("test-ds.xml");
@@ -68,33 +69,36 @@ public class QueryServiceTest {
 
     // sorted list of all Person entries in the default sql
     private Person[] allPerson = new Person[] {
-        new Person("lightguard_jp", "Jason Porter"),
-        new Person("mbg", "Marius Bogoevici"),
-        new Person("pmuir", "Pete Muir"),
-        new Person("rbenevides", "Rafael Benevides"),
-        new Person("sgilda", "Sande Gilda")
+            new Person("lightguard_jp", "Jason Porter"),
+            new Person("mbg", "Marius Bogoevici"),
+            new Person("pmuir", "Pete Muir"),
+            new Person("rbenevides", "Rafael Benevides"),
+            new Person("sgilda", "Sande Gilda")
     };
-    
+
     @Inject
     private PersonQueryService personQueryService;
-    
+
     /**
      * Run find all and confirm that all results are present.
      */
     @Test
-    public void testFindAll() {
+    public void testFindAll()
+    {
         List<Person> personList = personQueryService.findAll();
         assertEquals("List sizes should match", personList.size(), allPerson.length);
-        for (Person p : allPerson) {
+        for (Person p : allPerson)
+        {
             assertTrue("Results should contain all entries", personList.contains(p));
         }
     }
-    
+
     /**
      * Insure that findAllSortedByName returns a sorted list of the correct size.
      */
     @Test
-    public void testFindAllSorted() {
+    public void testFindAllSorted()
+    {
         List<Person> personList = personQueryService.findAllSortedByName();
         assertArrayEquals("Arrays should be equal", allPerson, personList.toArray());
     }
@@ -103,19 +107,20 @@ public class QueryServiceTest {
      * Runs a test to insure that filtering by person.name works correctly.
      */
     @Test
-    public void testFindByName() {
+    public void testFindByName()
+    {
         List<Person> personList = personQueryService.findByName("Rafael Benevides");
         assertEquals("Array length should be 1", 1, personList.size());
         assertEquals("Person's nick should be 'rbenevides'", "rbenevides", personList.get(0).getNick());
         assertEquals("Person's name should be 'Rafael Benevides'", "Rafael Benevides", personList.get(0).getName());
     }
-    
+
     /**
-     * Tests findPersonByNick and insures that the result is a Person object
-     * (as opposed to a List<Person>).
+     * Tests findPersonByNick and insures that the result is a Person object (as opposed to a List<Person>).
      */
     @Test
-    public void testFindByNick() {
+    public void testFindByNick()
+    {
         Person person = personQueryService.findPersonByNick("pmuir");
         assertEquals("Person's nick should be 'pmuir'", "pmuir", person.getNick());
         assertEquals("Person's name should be 'Pete Muir'", "Pete Muir", person.getName());

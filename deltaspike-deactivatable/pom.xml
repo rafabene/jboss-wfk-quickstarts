@@ -97,17 +97,20 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Deltaspike API. we use compile scope as we need its API -->
+        <!-- Deltaspike API, we use provided scope because Delstaspike is included 
+			as a JBoss Module -->
         <dependency>
             <groupId>org.apache.deltaspike.core</groupId>
             <artifactId>deltaspike-core-api</artifactId>
+            <scope>provided</scope>
         </dependency>
 
-        <!-- Deltaspike Impl. we use compile scope also since the Extensions 
-            that we need to deactivate are on this dependency -->
+        <!-- Deltaspike Impl, we use provided scope because Delstaspike is included 
+			as a JBoss Module -->
         <dependency>
             <groupId>org.apache.deltaspike.core</groupId>
             <artifactId>deltaspike-core-impl</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Testing dependencies and arquillian -->
